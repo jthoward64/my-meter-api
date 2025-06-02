@@ -12,3 +12,15 @@ All functionality is encapsulated within the `MyMeterApi` class. It requires fou
 - `rememberMeCookie`, `sidCookie`, and `cookieRequestVerificationToken` are the values of your `MM_RememberMe`, `MM_SID`, and `__RequestVerificationToken` cookies respectively
 
 Once you have an instance of `MyMeterApi`, just call `downloadUsage` with your meter number, the date range you want, and the interval you want to be returned. The API client will automatically perform the CSRF process, and then download and parse a usage CSV, returning an array of `MyMeterUsageValue` objects.
+
+## Running the example
+
+```
+cp .env.example .env
+
+# Fill out .env with your configuration
+
+uv sync --dev
+
+uv run ./example.py
+```

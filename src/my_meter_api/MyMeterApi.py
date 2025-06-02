@@ -4,7 +4,7 @@ from html.parser import HTMLParser
 import requests
 
 from my_meter_api.error import MyMeterApiError, MyMeterHttpError, MyMeterInternalError, MyMeterInvalidAuthenticationError, MyMeterParseError
-from my_meter_api.util import MyMeterUsageValue, UsageInterval
+from my_meter_api.util import MyMeterUsageValue, UsageDirection, UsageInterval
 
 
 # TOKEN_REGEX = re.compile(
@@ -131,7 +131,7 @@ class MyMeterApi:
         )
         return response
 
-    def parseUsageRaw(self, raw_data: str) -> list[MyMeterUsageValue]:
+    def parseUsageRaw(self, raw_data: str, interval: "UsageInterval") -> list[MyMeterUsageValue]:
         usage_values = []
         csv_reader = csv.reader(raw_data.splitlines(), delimiter=",")
         next(csv_reader)
@@ -143,7 +143,7 @@ class MyMeterApi:
                 usage_direction = row[1].strip()
                 consumption = float(row[2])
                 usage_values.append(
-                    MyMeterUsageValue(read_date, usage_direction, consumption)
+                    MyMeterUsageValue(read_date, interval, UsageDirection.fromString(usage_direction), consumption)
                 )
             except ValueError as e:
                 print(f"Error parsing row {row}: {e}")
@@ -180,4 +180,4 @@ class MyMeterApi:
             raise MyMeterInternalError(
                 "Unexpected content type received. Expected text/csv."
             )
-        return self.parseUsageRaw(response.text)
+        return self.parseUsageRaw(response.text, usageInterval)
