@@ -2,8 +2,8 @@ import csv
 import datetime
 import requests
 
-from lib.error import MyMeterApiError, MyMeterHttpError, MyMeterInternalError, MyMeterInvalidAuthenticationError, MyMeterParseError
-from lib.util import MyMeterUsageValue, RequestVerificationTokenParser, UsageInterval
+from error import MyMeterApiError, MyMeterHttpError, MyMeterInternalError, MyMeterInvalidAuthenticationError, MyMeterParseError
+from util import MyMeterUsageValue, RequestVerificationTokenParser, UsageInterval
 
 
 class MyMeterApi:

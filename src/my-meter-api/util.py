@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from html.parser import HTMLParser
 
@@ -32,9 +32,10 @@ class UsageInterval(Enum):
 
 class MyMeterUsageValue:
     def __init__(
-        self, read_date: datetime.datetime, usage_direction: str, consumption: float
+        self, fromDate: datetime, interval: "UsageInterval", usage_direction: str, consumption: float
     ):
-        self.read_date = read_date
+        self.fromDate = fromDate
+        self.interval = interval
         self.usage_direction = usage_direction
         self.consumption = consumption
 
@@ -43,7 +44,10 @@ class MyMeterUsageValue:
 
     def __repr__(self):
         return f"MyMeterUsageValue({self.read_date}, {self.usage_direction}, {self.consumption})"
-
+    
+    @property
+    def toDate(self):
+        return self.fromDate + timedelta(minutes=UsageInterval.durationInMinutes(self.interval))
 
 # TOKEN_REGEX = re.compile(
 #     r'(?:name=\\"__RequestVerificationToken)(?:[\\"\w\s=]*)value=\\"(.*?)\\"|value=\\"(.*?)\\"(?:[\\"\w\s=]*)(?:name=\\"__RequestVerificationToken)'
