@@ -1,10 +1,31 @@
 import csv
 import datetime
+from html.parser import HTMLParser
 import requests
 
-from error import MyMeterApiError, MyMeterHttpError, MyMeterInternalError, MyMeterInvalidAuthenticationError, MyMeterParseError
-from util import MyMeterUsageValue, RequestVerificationTokenParser, UsageInterval
+from my_meter_api.error import MyMeterApiError, MyMeterHttpError, MyMeterInternalError, MyMeterInvalidAuthenticationError, MyMeterParseError
+from my_meter_api.util import MyMeterUsageValue, UsageInterval
 
+
+# TOKEN_REGEX = re.compile(
+#     r'(?:name=\\"__RequestVerificationToken)(?:[\\"\w\s=]*)value=\\"(.*?)\\"|value=\\"(.*?)\\"(?:[\\"\w\s=]*)(?:name=\\"__RequestVerificationToken)'
+# )
+class _RequestVerificationTokenParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.token = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "input":
+            attrs_dict = dict(attrs)
+            if (
+                attrs_dict.get("name") == "__RequestVerificationToken"
+                and "value" in attrs_dict
+            ):
+                self.token = attrs_dict["value"]
+
+    def get_token(self):
+        return self.token
 
 class MyMeterApi:
     def __init__(
@@ -29,7 +50,7 @@ class MyMeterApi:
                 f"Failed to get request verification token: {response.text}",
                 response.status_code,
             )
-        parser = RequestVerificationTokenParser()
+        parser = _RequestVerificationTokenParser()
         parser.feed(response.text)
         formRequestVerificationToken = parser.get_token()
         if not formRequestVerificationToken:

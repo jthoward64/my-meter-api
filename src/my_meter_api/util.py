@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from enum import Enum
-from html.parser import HTMLParser
 
 
 class UsageInterval(Enum):
@@ -49,22 +48,3 @@ class MyMeterUsageValue:
     def toDate(self):
         return self.fromDate + timedelta(minutes=UsageInterval.durationInMinutes(self.interval))
 
-# TOKEN_REGEX = re.compile(
-#     r'(?:name=\\"__RequestVerificationToken)(?:[\\"\w\s=]*)value=\\"(.*?)\\"|value=\\"(.*?)\\"(?:[\\"\w\s=]*)(?:name=\\"__RequestVerificationToken)'
-# )
-class RequestVerificationTokenParser(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.token = None
-
-    def handle_starttag(self, tag, attrs):
-        if tag == "input":
-            attrs_dict = dict(attrs)
-            if (
-                attrs_dict.get("name") == "__RequestVerificationToken"
-                and "value" in attrs_dict
-            ):
-                self.token = attrs_dict["value"]
-
-    def get_token(self):
-        return self.token

@@ -21,4 +21,4 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/my-meter-api"]
+packages = ["src/my_meter_api"]

@@ -1,8 +1,8 @@
 import datetime
 
-from lib import MyMeterApi
-from lib.error import MyMeterError
-from lib.util import UsageInterval
+from my_meter_api import MyMeterApi
+from my_meter_api.error import MyMeterError
+from my_meter_api.util import UsageInterval
 
 
 def main():
