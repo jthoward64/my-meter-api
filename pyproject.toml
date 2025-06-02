@@ -1,0 +1,10 @@
+[project]
+name = "my-meter"
+version = "0.1.0"
+description = "Get your electricity meter reading and usage data from compatible MyMeter sites."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["requests>=2.32.3"]
+
+[dependency-groups]
+dev = ["python-dotenv>=1.1.0"]
